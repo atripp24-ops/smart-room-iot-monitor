@@ -1,6 +1,6 @@
 # Smart Room IoT Monitor
 
-## Overview
+## Overview 
 A Raspberry Pi Pico W system that monitors room temperature, humidity, and occupancy.
 
 ## Features
