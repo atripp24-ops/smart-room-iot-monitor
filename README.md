@@ -11,3 +11,4 @@ A Raspberry Pi Pico W system that monitors room temperature, humidity, and occup
 
 ## Status
 Day 1: Project setup complete
+Day 2: Web server fully functional, MQTT publish/subscribe implemented, System simulating real sensor data
