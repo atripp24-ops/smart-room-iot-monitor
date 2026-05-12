@@ -11,6 +11,9 @@ from web_server import WebServer
 
 from mqtt_client import MQTTManager
 
+from display import update_display
+
+
 #Import the time module (used for delays like sleep)
 import time
 
@@ -36,7 +39,11 @@ last_publish = time.ticks_ms()
 while True:
     # Call read_sensors() from sensors.py to retrieve current sensor data and store it in 'data'
     data = read_sensors()
+    
+    update_display(data)
+    
     server.check_client(data)
+    
     mqtt.check()
     
     now = time.ticks_ms()
