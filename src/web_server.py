@@ -76,7 +76,7 @@ class WebServer:
             response = self.generate_page(data)
             
             # Send the webpage back to the browser.
-            client.send(response)
+            client.send(response.encode())
             
              # Close the connection after sending the page.
             client.close()

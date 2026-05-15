@@ -1,49 +1,68 @@
-#mqtt_client
+# mqtt_client.py
 
-# Import the MQTTClient class from the MicroPython MQTT library.
-# This lets the Pico W connect to an MQTT broker, publish messages, and subscribe to topics.
-from umqtt.simple import MQTTClient
+# Import MQTT client library
+from mqtt.simple import MQTTClient
 
-# Import time module.
-# Not currently used in this file, so you can remove it unless you use it later.
+# Import time module
 import time
 
 
-# Create a class to manage MQTT communication.
+# Create a class to manage MQTT communication
 class MQTTManager:
 
-    # __init__ runs when you create an MQTTManager object.
-    # client_id = unique name for your Pico device
-    # broker = MQTT server address, example: "test.mosquitto.org"
-    # topic = MQTT topic/channel where messages are sent and received
+    # Runs when MQTTManager object is created
     def __init__(self, client_id, broker, topic):
 
-        # Create an MQTT client object using the device name and broker address.
+        # Create MQTT client
         self.client = MQTTClient(client_id, broker)
 
-        # Store the topic so other methods can use it later.
+        # Store topic
         self.topic = topic
 
 
-    # This function runs automatically when a subscribed MQTT message is received.
-    # topic = the topic/channel where the message came from
-    # msg = the actual message received
+    # Runs when subscribed message is received
     def callback(self, topic, msg):
 
-        # Print the message received from MQTT.
+        # Print received MQTT message
         print("Received:", msg)
 
 
-    # Connect to the MQTT broker and subscribe to the topic.
+    # Connect to MQTT broker
     def connect(self):
 
-        # Tell the MQTT client what function to call when a message arrives.
+        # Set callback function
         self.client.set_callback(self.callback)
 
-        # Connect to the MQTT broker.
+        # Connect to broker
         self.client.connect()
 
-        # Subscribe to the topic so this Pico can receive messages from it.
+        # Subscribe to topic
         self.client.subscribe(self.topic)
 
-        # Print
+        # Print successful connection message
+        print("MQTT connected")
+
+
+    # Publish sensor data to MQTT topic
+    def publish(self, data):
+
+        # Convert Python dictionary to string
+        message = f"{data}"
+
+        # Publish message to topic
+        self.client.publish(self.topic, message)
+
+        # Print published message
+        print("Published:", message)
+
+
+    # Check if new MQTT messages arrived
+    def check(self):
+
+        try:
+            # Check for incoming subscribed messages
+            self.client.check_msg()
+
+        except:
+            # Ignore errors for now
+            pass

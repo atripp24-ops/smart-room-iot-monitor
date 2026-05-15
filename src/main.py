@@ -1,60 +1,54 @@
-#main
+# main.py
 
-# Import the do_connect function from do_connect.py file
 from do_connect import do_connect
-# Import the secrets function from secrets.py file
 from secrets import secrets
-# Import the read_sensors function from sensors.py file
 from sensors import read_sensors
-# Im the WebServer function from web_server.py file
 from web_server import WebServer
-
 from mqtt_client import MQTTManager
-
-from display import update_display
-
-
-#Import the time module (used for delays like sleep)
 import time
 
-# Call the do_connect function using your WiFi name and password
-# secrets["ssid"] gets the WiFi name from the dictionary
-# secrets["password"] gets the password from the dictionary
-# The function returns the IP address (or None if failed)
+# Connect to WiFi and store the Pico W IP address
 ip = do_connect(secrets["ssid"], secrets["password"])
 
+# Stop program if WiFi connection failed
+if ip is None:
+    print("WiFi failed. Cannot start web server or MQTT.")
+    raise SystemExit
+
+# Start local web server using Pico W IP address
 server = WebServer(ip)
 
+# Set up MQTT connection
 mqtt = MQTTManager(
     client_id="alex_device",
     broker="test.mosquitto.org",
-    topic=b"alex/smart_room"
+    topic=secrets["mqtt_topic"]
 )
 
 mqtt.connect()
 
+# Track last MQTT publish time
 last_publish = time.ticks_ms()
 
-# Start an infinite loop (runs forever, will be used to continuously update other readings)
+# Main system loop
 while True:
-    # Call read_sensors() from sensors.py to retrieve current sensor data and store it in 'data'
+    # Read latest sensor values
     data = read_sensors()
-    
-    update_display(data)
-    
+
+    # Check if a browser requested the webpage
     server.check_client(data)
-    
+
+    # Check for incoming MQTT messages
     mqtt.check()
-    
+
+    # Publish data every 5 seconds
     now = time.ticks_ms()
-    
+
     if time.ticks_diff(now, last_publish) > 5000:
         mqtt.publish(data)
         last_publish = now
-        
+
+    # Print values in Thonny Shell for debugging
     print(data)
-    
+
     time.sleep(1)
-    
-
-

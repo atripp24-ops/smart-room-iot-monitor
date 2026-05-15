@@ -12,7 +12,7 @@ def do_connect (ssid, password):
     wlan.active(True)
     
     # Check if the Pico is NOT already connected to WiFi
-    if not wlan.isconnected:
+    if not wlan.isconnected():
         print("Connecting to Network...")
         # Attempt to connect using SSID and password
         wlan.connect(ssid,password)
@@ -33,7 +33,7 @@ def do_connect (ssid, password):
             timeout -= 1
     
     # After trying, check if connection was successful
-    if wlan.isconnected:
+    if wlan.isconnected():
         
         # Print full network info (IP, subnet, gateway, DNS)
         print("Connected" , wlan.ifconfig())
@@ -42,4 +42,4 @@ def do_connect (ssid, password):
     else:
         print("Failed to connect")
         # Return None to indicate failure
-        return none
+        return None

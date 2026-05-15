@@ -1,30 +1,20 @@
-#sensors
+# sensors.py
 
-from machine import pin
-import dht
-
-# DHT11 connected to GP15
-dht_sensor = dht.DHT11(Pin(15))
-
-# PIR sensor connected to GP14
-pir = Pin(14, Pin.IN)
+import random
 
 def read_sensors():
-    
-    # Read DHT11 values
-    dht_sensor.measure()
-    
-    temp_c = dht_sensor.temperature()
-    humidity = dht_sensor.humidity()
-    
-    # Convert celcius to Fahrenheit
-    temp_f = (temp_c * 9/5) + 32
-    
-    # Read motion sensor
-    motion = pir.value()
-    
-    return{
-        "temp" : round(temp_f, 1) ,
-        "humidity" : humidity,
-        "motion" : bool(motion)
-        }
+
+    # Fake temperature between 68F and 80F
+    temp = random.randint(68, 80)
+
+    # Fake humidity between 40% and 70%
+    humidity = random.randint(40, 70)
+
+    # Randomly choose occupied or empty
+    motion = random.choice([True, False])
+
+    return {
+        "temp": temp,
+        "humidity": humidity,
+        "motion": motion
+    }
