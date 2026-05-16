@@ -1,6 +1,6 @@
 #secrets
 
-# Create a dictionary called "secrets" to store important configuration values
+# Create a dictionary called "secrets" to store important configuration values 
 secrets = {
     # "ssid" is the name of your WiFi network (what you see when connecting on your phone)
     "ssid" : "MYWIFI",
