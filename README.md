@@ -1,6 +1,7 @@
 # Smart Room IoT Monitor
 
-## Project Overview
+## Overview 
+A Raspberry Pi Pico W system that monitors room temperature, humidity, and occupancy.
 
 This project is a Smart Room IoT Monitor built using a Raspberry Pi Pico W and MicroPython.
 
