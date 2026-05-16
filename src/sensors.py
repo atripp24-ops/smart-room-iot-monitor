@@ -1,20 +1,42 @@
 # sensors.py
 
-import random
+# Import Pin class for GPIO communication
+from machine import Pin
 
+# Import DHT sensor library
+import dht
+
+
+# Create DHT11 sensor object connected to GPIO 15
+dht_sensor = dht.DHT11(Pin(15))
+
+# Create PIR motion sensor object connected to GPIO 14
+pir = Pin(14, Pin.IN)
+
+
+# Function that reads all sensor data
 def read_sensors():
 
-    # Fake temperature between 68F and 80F
-    temp = random.randint(68, 80)
+    # Tell the DHT11 to take a new measurement
+    dht_sensor.measure()
 
-    # Fake humidity between 40% and 70%
-    humidity = random.randint(40, 70)
+    # Read temperature in Celsius
+    temp_c = dht_sensor.temperature()
 
-    # Randomly choose occupied or empty
-    motion = random.choice([True, False])
+    # Read humidity percentage
+    humidity = dht_sensor.humidity()
 
+    # Convert Celsius to Fahrenheit
+    temp_f = (temp_c * 9 / 5) + 32
+
+    # Read PIR motion sensor value
+    # 1 = motion detected
+    # 0 = no motion detected
+    motion = pir.value()
+
+    # Return all sensor values as a dictionary
     return {
-        "temp": temp,
+        "temp": round(temp_f, 1),
         "humidity": humidity,
-        "motion": motion
+        "motion": bool(motion)
     }
